@@ -39,12 +39,13 @@ void	BitcoinExchange::init_csv(void)
 		}
 	}
 }
-//
+
 int	BitcoinExchange::data_base(const char *av)
 {
 	if (!av)
 		return (1);
 	std::ifstream infile(av);
+	/* Check if the file is open */
 	if (!infile.is_open()) {
 		std::cerr << "failed to open file." << std::endl;
 		return (1);
@@ -52,28 +53,38 @@ int	BitcoinExchange::data_base(const char *av)
 	std::string read;
 	size_t size;
 	float nb = 0.0;
+	/* Iterator created for the last bloc condition */
 	std::map<std::string, float>::const_iterator it;
 	while(std::getline(infile, read)) {
 		if (read != "date | value") {
+			/* Pipe exist ?! If not continue to the next index */
 			if ((size = read.find('|')) >= read.size()) {
 				std::cout << "Error: No separation pipe in file" << std::endl;
 				continue;
 			}
+			/* Is there the right datum ?! If not continue to the next index */
 			if ((read[size - 1] != ' ') || (read[size - 2] == ' ')) {
 				std::cout << "Error: Wrong format of datum." << std::endl;
 				continue;
 			}
+			/* Create the key = datum */
 			std::string key = read.substr(0, size - 1);
+			/* Create the value, a string to check if negative */
 			std::string value = read.substr(size + 1, read.size());
 			if (value.find("-") == 1) {
 				std::cout << "Error: Value is negative" << std::endl;
 				continue;
 			}
-			std::istringstream(read.substr(size + 1, read.length())) >> nb;
+			/* Check if the conversion is a success, if std::istringstream fail maybe no number was given */
+			if (!(std::istringstream(read.substr(size + 1, read.length())) >> nb)) {
+				std::cout << "Error: Il manque la valeure" << std::endl;
+				continue;
+			}
 			if (nb > 1000) {
 				std::cout << "Error: Value is higher as 1000" << std::endl;
 				continue;
 			}
+			/* Find the right datum in the database if not we take the datum before this who doesn't exist in the data. */
 			if (_map.find(key) == _map.end()) {
 				float i;
 				for (it = _map.begin(); it != _map.end(); ++it) {
@@ -85,7 +96,6 @@ int	BitcoinExchange::data_base(const char *av)
 				i = it->second;
 				i *= nb;
  				std::cout << it->first << " | " << i << std::endl;
-//				std::cout << "Date: " << it->first << " Taux de change: " << it->second << std::endl;
 			}
 			else {
 				float i;
