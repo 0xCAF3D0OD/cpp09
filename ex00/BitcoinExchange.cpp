@@ -40,6 +40,24 @@ void	BitcoinExchange::init_csv(void)
 	}
 }
 
+bool 	BitcoinExchange::is_valid_date(const std::string& date_str)
+{
+	int year, month, day;
+	char delim;
+	std::istringstream date(date_str);
+	date >> year >> delim >> month >> delim >> day;
+	if (date.fail() || date.peek() != EOF) {
+		// The conversion failed or it's still exist character in the string.
+		return false;
+	}
+	// The months are invalid.
+	if (month < 1 || month > 12)
+		return (false);
+	
+	std::cout << "year = " << year << " " << month << " " << day << std::endl;
+	return (true);
+}
+
 int	BitcoinExchange::data_base(const char *av)
 {
 	if (!av)
@@ -69,6 +87,11 @@ int	BitcoinExchange::data_base(const char *av)
 			}
 			/* Create the key = datum */
 			std::string key = read.substr(0, size - 1);
+			if (key.find("-") > 4) {
+				std::cout << "Error: datum separation must be '-'" << std::endl;
+				continue;
+			}
+			is_valid_date(key);
 			/* Create the value, a string to check if negative */
 			std::string value = read.substr(size + 1, read.size());
 			if (value.find("-") == 1) {
@@ -77,7 +100,7 @@ int	BitcoinExchange::data_base(const char *av)
 			}
 			/* Check if the conversion is a success, if std::istringstream fail maybe no number was given */
 			if (!(std::istringstream(read.substr(size + 1, read.length())) >> nb)) {
-				std::cout << "Error: Il manque la valeure" << std::endl;
+				std::cout << "Error: Il manque la valeur du btc" << std::endl;
 				continue;
 			}
 			if (nb > 1000) {
@@ -101,7 +124,7 @@ int	BitcoinExchange::data_base(const char *av)
 				float i;
 				i = it->second;
 				i *= nb;
-				std::cout << key << " | " << i << std::endl;
+				std::cout << read << " | " << i << std::endl;
 			}
 		}
 	}

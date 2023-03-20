@@ -11,6 +11,7 @@
 #include <fstream>
 #include <string_view>
 #include <sstream>
+#include <stdexcept>
 
 class	BitcoinExchange
 {
@@ -23,6 +24,7 @@ public:
 
 	void	init_csv(void);
 	int 	data_base(char const *av);
+	bool 	is_valid_date(const std::string& date_str);
 	~BitcoinExchange(void);
 };
 #endif //CPP09_BITCOINEXCHANGE_HPP
