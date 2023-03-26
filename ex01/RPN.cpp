@@ -24,7 +24,6 @@ int	RPN::check_arguments(std::string arg) {
 	while (ss >> word) {
 		if ((word.compare("+") != 0) && (word.compare("-") != 0)
 			&& (word.compare("*") != 0) && (word.compare("/") != 0))
-//			&& (word.compare(" ") != 0) && (word.compare("\t") != 0))
 		{
 			bool all_digits = true;
 			for(size_t j = 0; j < word.size(); ++j)
@@ -48,27 +47,58 @@ int	RPN::check_arguments(std::string arg) {
 	return (0);
 }
 
+int	RPN::operator_function(int first, int second, std::string operat) {
+	int res = 0;
+
+	if (!operat.compare("+"))
+		res = first + second;
+	else if (!operat.compare("-"))
+		res = first - second;
+	else if (!operat.compare("*"))
+		res = first * second;
+	else if (!operat.compare("/"))
+		res = first / second;
+	return (res);
+}
+
 int	RPN::calculus(std::string arg) {
 	std::stringstream ss(arg);
 	std::stringstream sa;
 	std::string word;
 	int	i = 0;
+	int	j = 0;
+	int res = 0;
+	int first = 0;
+	int second = 0;
 
 	std::cout << "argument2: " << arg << std::endl;
 
-	while (ss >> word) {
-		if ((word.compare("+")) && (word.compare("-"))
-			&& (word.compare("*")) && (word.compare("/")))
-			break ;
+	while (arg[j]) {
+		while (ss >> word) {
+			if (!(word.compare("+")) || !(word.compare("-"))
+				|| !(word.compare("*")) || !(word.compare("/")))
+				break;
+			i = std::atoi(word.c_str());
+			stack.push(i);
+		}
 		std::cout << word << std::endl;
-		i = std::atoi(word.c_str());
-		stack.push(i);
-	}
-	if (stack.size() >= 1 || stack.size() == 2) {
-		while (!stack.empty()) {
-			std::cout << stack.top() << " ";
+		if (stack.size() == 2) {
+			first = stack.top();
+			stack.pop();
+			second = stack.top();
 			stack.pop();
 		}
+		if (stack.size() == 1) {
+			first = res;
+			second = stack.top();
+			stack.pop();
+		}
+
+		res = operator_function(first, second, word);
+		std::cout << res << std::endl;
+
+//		std::cout << first << " and " << second << std::endl;
+		j++;
 	}
 
 	return (0);
