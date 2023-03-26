@@ -13,7 +13,7 @@ BitcoinExchange::BitcoinExchange(BitcoinExchange const& origin)
 BitcoinExchange & BitcoinExchange::operator=(const BitcoinExchange & origin)
 {
 	this->_map = origin._map;
-	return *this;
+	return (*this);
 }
 
 void	BitcoinExchange::init_csv(void)
