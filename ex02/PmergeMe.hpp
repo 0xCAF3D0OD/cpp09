@@ -12,7 +12,7 @@
 #include <string>
 #include <sstream>
 #include <cstdlib>
-
+#include <cstring>
 
 class PmergeMe
 {

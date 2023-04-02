@@ -29,6 +29,10 @@ int	PmergeMe::check_input(char *src) {
 			std::cout << "error: " << test << std::endl;
 			return (1);
 		}
+		if (std::strchr(test.c_str(), '-')) {
+			std::cout << "must be positive" << std::endl;
+			return (1);
+		}
 	}
 	return (0);
 }
