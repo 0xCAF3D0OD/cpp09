@@ -23,7 +23,9 @@ public:
 	PmergeMe(PmergeMe const& src);
 	PmergeMe& operator=(PmergeMe const& src);
 
-	int	check_input(char*);
+	int		check_input(char*);
+	void	mergeInSorte(char*);
+
 	~PmergeMe(void);
 
 };

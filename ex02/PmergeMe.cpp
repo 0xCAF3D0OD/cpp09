@@ -20,11 +20,8 @@ int	PmergeMe::check_input(char *src) {
 	std::string test;
 	char		*end;
 	long 		converted;
-	std::cout << src << std::endl;
 
 	while (ss >> test) {
-		std::cout << test << std::endl;
-
 		if (!(converted = strtol(test.c_str(), &end, 10))) {
 			std::cout << "error: " << test << std::endl;
 			return (1);
@@ -35,6 +32,17 @@ int	PmergeMe::check_input(char *src) {
 		}
 	}
 	return (0);
+}
+
+void PmergeMe::mergeInSorte(char *src) {
+
+	std::stringstream	ss(src);
+	std::string 		input;
+	std::vector<int>::iterator it;
+	while (ss >> input)
+		_vector.push_back(std::atoi(input.c_str()));
+	for (it = _vector.begin(); it != _vector.end(); ++it)
+		std::cout << *it << std::endl;
 }
 
 PmergeMe::~PmergeMe(void) {}
