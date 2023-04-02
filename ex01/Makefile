@@ -12,7 +12,7 @@ OBJS_FILES	:= ${SRCS_FILES:.cpp=.o}
 OBJS		:= ${patsubst %, ${O_DIR}%, ${OBJS_FILES}}
 DEBUGS		:= ${patsubst %, ${D_DIR}%, ${OBJS_FILES}}
 
-NAME		= btc
+NAME		= RPN
 
 CXX			= g++
 HXX			= RPN.hpp

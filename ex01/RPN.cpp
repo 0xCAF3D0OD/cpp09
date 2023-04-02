@@ -15,16 +15,17 @@ RPN &RPN::operator=(const RPN &src) {
 }
 
 int	RPN::check_arguments(std::string arg) {
-	std::cout << "argument: " << arg << std::endl;
 	std::stringstream ss(arg);
 	std::stringstream sa;
 	std::string word;
 	int			i = 0;
 
 	while (ss >> word) {
+		// check if the current location is not a operator
 		if ((word.compare("+") != 0) && (word.compare("-") != 0)
 			&& (word.compare("*") != 0) && (word.compare("/") != 0))
 		{
+			// check if all character are digits
 			bool all_digits = true;
 			for(size_t j = 0; j < word.size(); ++j)
 			{
@@ -33,10 +34,12 @@ int	RPN::check_arguments(std::string arg) {
 					break ;
 				}
 			}
+			// return error
 			if (!all_digits) {
-				std::cerr << "string contain character" << std::endl;
+				std::cerr << "error" << std::endl;
 				return (1);
 			}
+			// check if the digit is bigger than 9 or lower than 0
 			sa << word;
 			if ((sa >> i && (i > 9 || i < 0))) {
 				std::cerr << "number is superior as 10 or less than 0" << std::endl;
@@ -58,6 +61,7 @@ int	RPN::operator_function(int first, int second, std::string operat) {
 		res = first * second;
 	else if (!operat.compare("/"))
 		res = first / second;
+//	std::cout << "evolution of the result: " << res << std::endl;
 	return (res);
 }
 
@@ -66,41 +70,34 @@ int	RPN::calculus(std::string arg) {
 	std::stringstream sa;
 	std::string word;
 	int	i = 0;
-	int	j = 0;
 	int res = 0;
 	int first = 0;
 	int second = 0;
 
-	std::cout << "argument2: " << arg << std::endl;
+	std::cout << "argument: " << arg << std::endl;
 
-	while (arg[j]) {
-		while (ss >> word) {
-			if (!(word.compare("+")) || !(word.compare("-"))
-				|| !(word.compare("*")) || !(word.compare("/")))
-				break;
+	while (ss >> word) {
+		if ((word.compare("+")) && (word.compare("-")) && (word.compare("*")) && (word.compare("/")))
+		{
+			std::cout << word.c_str() << std::endl;
 			i = std::atoi(word.c_str());
 			stack.push(i);
+			continue ;
 		}
-		std::cout << word << std::endl;
-		if (stack.size() == 2) {
-			first = stack.top();
-			stack.pop();
-			second = stack.top();
-			stack.pop();
+		if (stack.size() < 2)
+		{
+			std::cout << "error" << std::endl;
+			return (1);
 		}
-		if (stack.size() == 1) {
-			first = res;
-			second = stack.top();
-			stack.pop();
-		}
-
+		std::cout << stack.size() << " " << stack.top() << std::endl;
+		second = stack.top();
+		stack.pop();
+		first = stack.top();
+		stack.pop();
 		res = operator_function(first, second, word);
-		std::cout << res << std::endl;
-
-//		std::cout << first << " and " << second << std::endl;
-		j++;
+		stack.push(res);
 	}
-
+	std::cout << "the result: "<< stack.top() << std::endl;
 	return (0);
 }
 
