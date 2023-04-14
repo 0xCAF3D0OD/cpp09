@@ -13,6 +13,7 @@ PmergeMe::PmergeMe(PmergeMe const& src) {
 PmergeMe& PmergeMe::operator=(const PmergeMe &src) {
 	this->_v = src._v;
 	this->_l = src._l;
+	this->_time = src._time;
 	return (*this);
 }
 
@@ -84,57 +85,44 @@ void	PmergeMe::stock_args_string(char **av, int ac)
 	this->_v = numbers;
 }
 
-int	PmergeMe::check_input(char *src)
-{
-	std::stringstream ss(src);
-	std::string test;
-	char		*end;
-	long 		converted;
-
-	while (ss >> test) {
-		if (!(converted = strtol(test.c_str(), &end, 10))) {
-			std::cout << "error: " << test << std::endl;
-			return (1);
-		}
-		if (std::strchr(test.c_str(), '-')) {
-			std::cout << "must be positive" << std::endl;
-			return (1);
-		}
-	}
-	return (0);
-}
-
 void PmergeMe::sort_sequence(std::vector<int>& v, std::list<int>& l)
 {
+	(void) l;
 	clock_t start_time = clock();
 	std::sort(v.begin(), v.end());
 	clock_t end_time = clock();
-	double time = static_cast<double>(end_time - start_time) / CLOCKS_PER_SEC;
-	std::cout << "Sort time using vector: " << time << " seconds" << std::endl;
+	_time = static_cast<long double>(end_time - start_time) / CLOCKS_PER_SEC;
 
-	start_time = clock();
-	l.sort();
-	end_time = clock();
-	time = static_cast<double>(end_time - start_time) / CLOCKS_PER_SEC;
-	std::cout << "Sort time using list: " << time << " seconds" << std::endl;
+//	start_time = clock();
+//	l.sort();
+//	end_time = clock();
+//	time = static_cast<double>(end_time - start_time) / CLOCKS_PER_SEC;
+//	std::cout << "Sort time using list: " << time << " seconds" << std::endl;
 }
 
 void PmergeMe::display_sequence_vector(const std::vector<int>& v, const std::string& title)
 {
-	std::cout << title << ": ";
+	std::cout << title << ":	\" ";
 	for (std::vector<int>::const_iterator it = v.begin(); it != v.end(); ++it) {
 		std::cout << *it << " ";
 	}
-	std::cout << std::endl;
+	std::cout << "\"" << std::endl;
 }
 
 void PmergeMe::display_sequence_list(const std::list<int>& v, const std::string& title)
 {
-	std::cout << title << ": ";
+	std::cout << title << ":	";
 	for (std::list<int>::const_iterator it = v.begin(); it != v.end(); ++it) {
 		std::cout << *it << " ";
 	}
 	std::cout << std::endl;
 }
 
+void	PmergeMe::algo(void)
+{
+	display_sequence_vector(_v, "Before");
+	sort_sequence(_v, _l);
+	display_sequence_vector(_v, "After");
+	std::cout << "Sort time using vector: " << _time << " seconds" << std::endl;
+}
 PmergeMe::~PmergeMe(void) {}

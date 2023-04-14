@@ -19,6 +19,7 @@ class PmergeMe
 private:
 	std::vector<int> _v;
 	std::list<int> _l;
+	long double _time;
 public:
 	PmergeMe(void);
 	PmergeMe(PmergeMe const& src);
@@ -29,7 +30,7 @@ public:
 	void	sort_sequence(std::vector<int>& v, std::list<int>& l);
 	void	display_sequence_vector(const std::vector<int>& v, const std::string& title);
 	void	display_sequence_list(const std::list<int>& v, const std::string& title);
-	int		check_input(char*);
+	void	algo(void);
 //	void	mergeInSorte(char*);
 
 	~PmergeMe(void);

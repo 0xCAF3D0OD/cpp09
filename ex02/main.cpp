@@ -11,7 +11,7 @@ int main(int ac, char **av) {
 	else if (test.check_args_is_digit(av, ac))
 		return (1);
 	test.stock_args_string(av, ac);
-//	test.check_input(av)
+	test.algo();
 	return (0);
 //
 //	for (int i = 0; av[i]; ++i)
