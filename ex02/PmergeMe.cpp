@@ -1,7 +1,7 @@
 //
 // Created by Kevin Di nocera on 4/2/23.
 //
-
+#include <stdio.h>
 #include "PmergeMe.hpp"
 
 PmergeMe::PmergeMe(void) {}
@@ -23,7 +23,6 @@ void	print_av(char **av, std::vector<int> number, int id)
 			std::cout << "av[" << i << "] = " << av[i] << std::endl;
 	}
 	if (id == 2) {
-		std::cout << "size = " << number.size() << std::endl;
 		for (size_t it = 0; it < number.size(); ++it)
 			std::cout << "it[" << it << "] = " << number[it] << std::endl;
 	}
@@ -35,14 +34,18 @@ int PmergeMe::check_args_is_digit(char **av, int ac)
 
 	for (int it = 1; av[it]; ++it) {
 		tmp = av[it];
-		if (ac != 2) {
+		if (ac > 2) {
 			if (tmp.find_first_not_of("0123456789") != std::string::npos) {
+				if (strchr(tmp.c_str(), '-'))
+					std::cerr << "error: digit must be positive => ";
 				std::cerr << "error: is_digit:" << std::endl;
 				return (1);
 			}
 		}
 		else {
 			if (tmp.find_first_not_of("0123456789 ") != std::string::npos) {
+				if (strchr(tmp.c_str(), '-'))
+					std::cerr << "error: digit must be positive => ";
 				std::cerr << "error: is_digit:" << std::endl;
 				return (1);
 			}
@@ -55,6 +58,7 @@ std::vector<int> stock_1_string(char **av, std::vector<int> tab_num)
 {
 	std::stringstream	ss;
 	int					num;
+
 	for (int i = 1; av[i]; ++i)
 		ss << av[i];
 	while (ss >> num)
@@ -62,33 +66,26 @@ std::vector<int> stock_1_string(char **av, std::vector<int> tab_num)
 	return (tab_num);
 }
 
-int	PmergeMe::stock_args_string(char **av, int ac) {
-	std::vector<int> 	numbers;
-//	std::string 		space;
-	(void) ac;
-
-//	print_av(av, numbers, 1);
-	// arrays to integer
-	numbers = stock_1_string(av, numbers);
-	print_av(av, numbers, 2);
-//	std::cout << numbers.size() << std::endl;
-//	std::cout << ss.str().size() << " " << numbers.size() << std::endl;
-//	for (ss >> space)
-//	{
-//		if (std::strcmp(space, " "))
-//
-//	}
-//	if (ss.str().size() != numbers.size())
-//	{
-//		std::cerr << ss.str().size() << " " << numbers.size() << " string contain non digit elements" << std::endl;
-//		return (1);
-//	}
-//	for (size_t i = 0; i < numbers.size(); ++i)
-//		std::cout << numbers[i] << " ";
-	return (0);
+std::vector<int> stock_many_strings(char **av, std::vector<int> tab_num)
+{
+	for (int i = 1; av[i]; i++)
+		tab_num.push_back(std::atoi(av[i]));
+	return (tab_num);
 }
 
-int	PmergeMe::check_input(char *src) {
+void	PmergeMe::stock_args_string(char **av, int ac)
+{
+	std::vector<int> 	numbers;
+
+	if (ac == 2)
+		numbers = stock_1_string(av, numbers);
+	else
+		numbers = stock_many_strings(av, numbers);
+	this->_v = numbers;
+}
+
+int	PmergeMe::check_input(char *src)
+{
 	std::stringstream ss(src);
 	std::string test;
 	char		*end;
@@ -107,7 +104,8 @@ int	PmergeMe::check_input(char *src) {
 	return (0);
 }
 
-void PmergeMe::sort_sequence(std::vector<int>& v, std::list<int>& l) {
+void PmergeMe::sort_sequence(std::vector<int>& v, std::list<int>& l)
+{
 	clock_t start_time = clock();
 	std::sort(v.begin(), v.end());
 	clock_t end_time = clock();
@@ -121,7 +119,8 @@ void PmergeMe::sort_sequence(std::vector<int>& v, std::list<int>& l) {
 	std::cout << "Sort time using list: " << time << " seconds" << std::endl;
 }
 
-void PmergeMe::display_sequence_vector(const std::vector<int>& v, const std::string& title) {
+void PmergeMe::display_sequence_vector(const std::vector<int>& v, const std::string& title)
+{
 	std::cout << title << ": ";
 	for (std::vector<int>::const_iterator it = v.begin(); it != v.end(); ++it) {
 		std::cout << *it << " ";
@@ -129,7 +128,8 @@ void PmergeMe::display_sequence_vector(const std::vector<int>& v, const std::str
 	std::cout << std::endl;
 }
 
-void PmergeMe::display_sequence_list(const std::list<int>& v, const std::string& title) {
+void PmergeMe::display_sequence_list(const std::list<int>& v, const std::string& title)
+{
 	std::cout << title << ": ";
 	for (std::list<int>::const_iterator it = v.begin(); it != v.end(); ++it) {
 		std::cout << *it << " ";
