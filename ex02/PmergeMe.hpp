@@ -24,7 +24,7 @@ public:
 	PmergeMe(PmergeMe const& src);
 	PmergeMe& operator=(PmergeMe const& src);
 
-	int		check_args_string(char **av);
+	int		check_args_string(char **av, int ac);
 	void	sort_sequence(std::vector<int>& v, std::list<int>& l);
 	void	display_sequence_vector(const std::vector<int>& v, const std::string& title);
 	void	display_sequence_list(const std::list<int>& v, const std::string& title);

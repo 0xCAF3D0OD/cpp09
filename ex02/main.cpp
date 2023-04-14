@@ -6,11 +6,10 @@
 int main(int ac, char **av) {
 	PmergeMe test;
 
-	if (ac <= 2 && test.check_args_string(av) == 1)
-	{
-		std::cerr << "error" << std::endl;
+	if (ac <= 2 && test.check_args_string(av, ac))
 		return (1);
-	}
+	else if (test.check_args_string(av, ac))
+		return (1);
 	return (0);
 //
 //	for (int i = 0; av[i]; ++i)
