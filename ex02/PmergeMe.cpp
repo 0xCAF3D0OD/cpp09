@@ -29,7 +29,7 @@ void	print_av(char **av, std::vector<int> number, int id)
 	}
 }
 
-int check_args_is_digit(char **av, int ac)
+int PmergeMe::check_args_is_digit(char **av, int ac)
 {
 	std::string 		tmp;
 
@@ -51,22 +51,26 @@ int check_args_is_digit(char **av, int ac)
 	return (0);
 }
 
-int	PmergeMe::check_args_string(char **av, int ac) {
+std::vector<int> stock_1_string(char **av, std::vector<int> tab_num)
+{
 	std::stringstream	ss;
+	int					num;
+	for (int i = 1; av[i]; ++i)
+		ss << av[i];
+	while (ss >> num)
+		tab_num.push_back(num);
+	return (tab_num);
+}
+
+int	PmergeMe::stock_args_string(char **av, int ac) {
 	std::vector<int> 	numbers;
 //	std::string 		space;
-//	int					num;
+	(void) ac;
 
-	print_av(av, numbers, 1);
-	if (check_args_is_digit(av, ac))
-		return (1);
-
-//	// arrays to integer
-//	for (int i = 1; av[i]; ++i)
-//		ss << av[i];
-//	while (ss >> num)
-//		numbers.push_back(num);
-//	print_av(av, numbers, 2);
+//	print_av(av, numbers, 1);
+	// arrays to integer
+	numbers = stock_1_string(av, numbers);
+	print_av(av, numbers, 2);
 //	std::cout << numbers.size() << std::endl;
 //	std::cout << ss.str().size() << " " << numbers.size() << std::endl;
 //	for (ss >> space)

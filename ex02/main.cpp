@@ -6,10 +6,11 @@
 int main(int ac, char **av) {
 	PmergeMe test;
 
-	if (ac <= 2 && test.check_args_string(av, ac))
+	if (ac <= 2 && test.check_args_is_digit(av, ac))
 		return (1);
-	else if (test.check_args_string(av, ac))
+	else if (test.check_args_is_digit(av, ac))
 		return (1);
+	test.stock_args_string(av, ac);
 	return (0);
 //
 //	for (int i = 0; av[i]; ++i)
