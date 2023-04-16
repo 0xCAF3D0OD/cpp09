@@ -22,7 +22,7 @@ MKDIR		= mkdir
 CP			= cp -f
 RM			= rm -f
 
-CXXFLAGS	= -std=c++98 -Wall -Wextra -Werror -g -Wfatal-errors
+CXXFLAGS	= -std=c++98 -Wall -Wextra -Werror -g #-Wfatal-errors
 
 
 all:		${NAME}
