@@ -48,62 +48,33 @@ std::list<int> stock_many_strings_L(char **av, std::list<int> tab_num) {
 	return (tab_num);
 }
 
-std::list<int> PmergeMe::merge_lists(const std::list<int>& left, const std::list<int>& right)
-{
-	std::list<int> result;
-	std::list<int>::const_iterator left_it = left.begin();
-	std::list<int>::const_iterator right_it = right.begin();
-	while (left_it != left.end() && right_it != right.end())
-	{
-		if (*left_it <= *right_it)
-		{
-			result.push_back(*left_it);
-			++left_it;
-		}
-		else
-		{
-			result.push_back(*right_it);
-			++right_it;
+void PmergeMe::merge_insertion_sort(std::list<int>& A, int k) {
+	int n = A.size();
+	for (int i = 0; i < n; i += k) {
+		std::list<int>::iterator it1 = A.begin();
+		advance(it1, i);
+		std::list<int>::iterator it2 = it1;
+		advance(it2, k);
+		A.insert(it2, A.end());
+		A.sort(it1, it2);
+	}
+	for (int j = k; j < n; j *= 2) {
+		for (int i = 0; i < n; i += 2*j) {
+			std::list<int>::iterator it1 = A.begin();
+			advance(it1, i);
+			std::list<int>::iterator it2 = it1;
+			advance(it2, j);
+			std::list<int>::iterator it3 = it2;
+			advance(it3, j);
+			if (it3 == A.end()) {
+				it3 = A.begin();
+				advance(it3, n);
+			}
+			std::list<int> B;
+			A.merge(B, it1, it2);
+			A.merge(B, it2, it3);
 		}
 	}
-	// on ajoute les éléments restants de la liste de gauche
-	while (left_it != left.end())
-	{
-		result.push_back(*left_it);
-		++left_it;
-	}
-	// on ignore les éléments restants de la liste de droite
-	// car ils sont plus grands que tous les éléments de la liste de gauche
-	return result;
-}
-
-void	PmergeMe::merge_insertion_sort_list(std::list<int>& lst, size_t k)
-{
-	if (lst.size() < k)
-	{
-		// tri par insertion pour les sous-listes plus petites que k
-		for (std::list<int>::iterator it = lst.begin(); it != lst.end(); ++it)
-		{
-			// recherche du point d'insertion
-			std::list<int>::iterator insertion_point = lst.begin();
-			while (insertion_point != it && *insertion_point < *it) ++insertion_point;
-			// insertion de l'élément à sa position
-			if (insertion_point != it) lst.insert(insertion_point, *it);
-			else if (++insertion_point != it) lst.insert(insertion_point, *it);
-			// il n'est pas nécessaire de faire une insertion s'il est déjà à la bonne position
-		}
-		return;
-	}
-	// tri fusion pour les sous-listes plus grandes que k
-	std::list<int> left, right;
-	std::list<int>::iterator it = lst.begin();
-	std::advance(it, lst.size() / 2);
-//	left.splice(left.begin(), lst, lst.begin(), it);
-//	right.splice(right.begin(), lst, it, lst.end());
-//	merge_insertion_sort_list(left, k);
-//	merge_insertion_sort_list(right, k);
-//	std::list<int> merged_list = merge_lists(left, right);
-//	lst.merge(merged_list);
 }
 
 void PmergeMe::display_sequence_list(const std::list<int>& v, const std::string& title)
@@ -234,7 +205,7 @@ void PmergeMe::sort_sequence(std::vector<int>& v, std::list<int>& l)
 	_timeV = ((end.tv_sec - start.tv_sec)  * 1e-6) + (end.tv_usec - start.tv_usec);
 
 	gettimeofday(&start, 0);
-	merge_insertion_sort_list(l, 5);
+	merge_insertion_sort(l, 5);
 	gettimeofday(&end, 0);
 	_timeL = ((end.tv_sec - start.tv_sec)  * 1e-6) + (end.tv_usec - start.tv_usec);
 }

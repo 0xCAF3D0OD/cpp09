@@ -35,8 +35,9 @@ public:
 	void	insertion_sort(std::vector<int>& arr, int left, int right);
 	void	merge_V(std::vector<int> &v, int left, int mid, int right);
 
-	void	merge_insertion_sort_list(std::list<int>& lst, size_t k);
-	std::list<int> merge_lists(const std::list<int>& left, const std::list<int>& right);
+	void	merge_insertion_sort(std::list<int>& A, int k);
+//	void	merge_insertion_sort_list(std::list<int>& lst, size_t k);
+//	std::list<int> merge_lists(const std::list<int>& left, const std::list<int>& right);
 
 	void	display_sequence_vector(const std::vector<int>& v, const std::string& title);
 	void	display_sequence_list(const std::list<int>& v, const std::string& title);
