@@ -5,6 +5,7 @@
 #ifndef CPP09_PMERGEME_HPP
 #define CPP09_PMERGEME_HPP
 
+#include <algorithm>
 #include <iostream>
 #include <cstdlib>
 #include <cstring>
@@ -14,12 +15,14 @@
 #include <string>
 #include <list>
 
+//template <typename T>
 class PmergeMe
 {
 private:
 	std::vector<int>	_v;
 	std::list<int>		_l;
-	float 			_time;
+	float 			_timeV;
+	float 			_timeL;
 public:
 	PmergeMe(void);
 	PmergeMe(PmergeMe const& src);
@@ -29,11 +32,15 @@ public:
 	int		check_args_is_digit(char **av, int ac);
 	void	sort_sequence(std::vector<int>& v, std::list<int>& l);
 	void	merge_sort(std::vector<int> &v, int left, int right, int max_size_temp_tab);
-	void	merge(std::vector<int> &v, int left, int mid, int right);
+	void	insertion_sort(std::vector<int>& arr, int left, int right);
+	void	merge_V(std::vector<int> &v, int left, int mid, int right);
+
+	void	merge_insertion_sort_list(std::list<int>& lst, size_t k);
+	std::list<int> merge_lists(const std::list<int>& left, const std::list<int>& right);
+
 	void	display_sequence_vector(const std::vector<int>& v, const std::string& title);
 	void	display_sequence_list(const std::list<int>& v, const std::string& title);
 	void	algo(void);
-//	void	mergeInSorte(char*);
 
 	~PmergeMe(void);
 

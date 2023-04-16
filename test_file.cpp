@@ -1,6 +1,19 @@
 //
 // Created by Kevin Di nocera on 4/16/23.
 //
+
+void	print_av(char **av, std::vector<int> number, int id)
+{
+	if (id == 1) {
+		for (int i = 0; av[i]; ++i)
+			std::cout << "av[" << i << "] = " << av[i] << std::endl;
+	}
+	if (id == 2) {
+		for (size_t it = 0; it < number.size(); ++it)
+			std::cout << "it[" << it << "] = " << number[it] << std::endl;
+	}
+}
+
 void	PmergeMe::merge(std::vector<int> &v, int left, int mid, int right)
 {
 	int L_side = mid - left + 1;
@@ -93,7 +106,38 @@ void	PmergeMe::merge_sort(std::vector<int> &v, int left, int right, int max_size
 
 void PmergeMe::sort_sequence(std::vector<int>& v, std::list<int>& l)
 {
+	(void) l;
 	int	left = 0;
 	int right = _v.size() - 1;
-//	taille maximale des sous-tableaux qui seront triés à l'aide du tri par insertion.
+	//	Taille maximale des sous-tableaux qui seront triés à l'aide du tri par insertion.
 	int	max_size_temp_tab = 5;
+
+	struct timeval start, end;
+	gettimeofday(&start, 0);
+	merge_sort(v, left, right, max_size_temp_tab);
+	gettimeofday(&end, 0);
+	_time = ((end.tv_sec - start.tv_sec)  * 1e-6) + (end.tv_usec - start.tv_usec);
+
+//	(void) l;
+//	clock_t start_time = clock();
+//	std::sort(v.begin(), v.end());
+//	clock_t end_time = clock();
+//	_time = static_cast<long double>(end_time - start_time) * 1000000 / CLOCKS_PER_SEC;
+
+//	start_time = clock();
+//	l.sort();
+//	end_time = clock();
+//	time = static_cast<double>(end_time - start_time) / CLOCKS_PER_SEC;
+//	std::cout << "Sort time using list: " << time << " seconds" << std::endl;
+}
+
+void	PmergeMe::algo(void)
+{
+	display_sequence_vector(_v, "Before");
+
+	sort_sequence(_v, _l);
+	display_sequence_vector(_v, "After");
+	std::cout << "Time to process a range of: " << _v.size() << " elements with std::vector: ";
+	std::cout << "Measured time is = " << std::fixed << std::setprecision(5) << _time << " microseconds." << std::endl;
+}
+PmergeMe::~PmergeMe(void) {}
