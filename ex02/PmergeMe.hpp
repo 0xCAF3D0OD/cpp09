@@ -17,9 +17,9 @@
 class PmergeMe
 {
 private:
-	std::vector<int> _v;
-	std::list<int> _l;
-	long double _time;
+	std::vector<int>	_v;
+	std::list<int>		_l;
+	float 			_time;
 public:
 	PmergeMe(void);
 	PmergeMe(PmergeMe const& src);

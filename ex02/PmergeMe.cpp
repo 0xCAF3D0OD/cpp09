@@ -1,6 +1,8 @@
 //
 // Created by Kevin Di nocera on 4/2/23.
 //
+#include <sys/time.h>
+#include <iomanip>
 #include <stdio.h>
 #include "PmergeMe.hpp"
 
@@ -82,16 +84,28 @@ void	PmergeMe::stock_args_string(char **av, int ac)
 		numbers = stock_1_string(av, numbers);
 	else
 		numbers = stock_many_strings(av, numbers);
+	if (numbers.size() == 1)
+	{
+		std::cerr << "error: less arguments" << std::endl;
+		exit(1);
+	}
 	this->_v = numbers;
 }
 
 void PmergeMe::sort_sequence(std::vector<int>& v, std::list<int>& l)
 {
 	(void) l;
-	clock_t start_time = clock();
+	struct timeval start, end;
+	gettimeofday(&start, 0);
 	std::sort(v.begin(), v.end());
-	clock_t end_time = clock();
-	_time = static_cast<long double>(end_time - start_time) / CLOCKS_PER_SEC;
+	gettimeofday(&end, 0);
+	_time = ((end.tv_sec - start.tv_sec)  * 1e-6) + (end.tv_usec - start.tv_usec);
+
+//	(void) l;
+//	clock_t start_time = clock();
+//	std::sort(v.begin(), v.end());
+//	clock_t end_time = clock();
+//	_time = static_cast<long double>(end_time - start_time) * 1000000 / CLOCKS_PER_SEC;
 
 //	start_time = clock();
 //	l.sort();
@@ -123,6 +137,7 @@ void	PmergeMe::algo(void)
 	display_sequence_vector(_v, "Before");
 	sort_sequence(_v, _l);
 	display_sequence_vector(_v, "After");
-	std::cout << "Sort time using vector: " << _time << " seconds" << std::endl;
+	std::cout << "Time to process a range of: " << _v.size() << " elements with std::vector: ";
+	std::cout << "Measured time is = " << std::fixed << std::setprecision(5) << _time << " seconds." << std::endl;
 }
 PmergeMe::~PmergeMe(void) {}
