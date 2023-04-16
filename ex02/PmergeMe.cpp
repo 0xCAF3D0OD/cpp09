@@ -64,15 +64,26 @@ std::vector<int> stock_1_string(char **av, std::vector<int> tab_num)
 
 	for (int i = 1; av[i]; ++i)
 		ss << av[i];
-	while (ss >> num)
+	while (ss >> num) {
+		if (num > INT_MAX || num < 0) {
+			std::cerr << "error: INT_MIN INT_MAX" << std::endl;
+			exit(1);
+		}
 		tab_num.push_back(num);
+	}
 	return (tab_num);
 }
 
 std::vector<int> stock_many_strings(char **av, std::vector<int> tab_num)
 {
 	for (int i = 1; av[i]; i++)
+	{
+		if (std::atoi(av[i]) > INT_MAX || std::atoi(av[i]) < 0) {
+			std::cerr << "error: INT_MIN INT_MAX" << std::endl;
+			exit (1);
+		}
 		tab_num.push_back(std::atoi(av[i]));
+	}
 	return (tab_num);
 }
 
