@@ -48,33 +48,57 @@ std::list<int> stock_many_strings_L(char **av, std::list<int> tab_num) {
 	return (tab_num);
 }
 
-void PmergeMe::merge_insertion_sort(std::list<int>& A, int k) {
-	int n = A.size();
-	for (int i = 0; i < n; i += k) {
-		std::list<int>::iterator it1 = A.begin();
-		advance(it1, i);
-		std::list<int>::iterator it2 = it1;
-		advance(it2, k);
-		A.insert(it2, A.end());
-		A.sort(it1, it2);
-	}
-	for (int j = k; j < n; j *= 2) {
-		for (int i = 0; i < n; i += 2*j) {
-			std::list<int>::iterator it1 = A.begin();
-			advance(it1, i);
-			std::list<int>::iterator it2 = it1;
-			advance(it2, j);
-			std::list<int>::iterator it3 = it2;
-			advance(it3, j);
-			if (it3 == A.end()) {
-				it3 = A.begin();
-				advance(it3, n);
-			}
-			std::list<int> B;
-			A.merge(B, it1, it2);
-			A.merge(B, it2, it3);
+// Function to merge two sorted lists
+std::list<int> PmergeMe::merge(const std::list<int>& left, const std::list<int>& right) {
+	std::list<int> result;
+	std::list<int>::const_iterator left_iter = left.begin();
+	std::list<int>::const_iterator right_iter = right.begin();
+
+	while (left_iter != left.end() && right_iter != right.end()) {
+		if (*left_iter <= *right_iter) {
+			result.push_back(*left_iter);
+			++left_iter;
+		} else {
+			result.push_back(*right_iter);
+			++right_iter;
 		}
 	}
+
+	result.insert(result.end(), left_iter, left.end());
+	result.insert(result.end(), right_iter, right.end());
+
+	return result;
+}
+
+// Function to perform insertion sort on a list
+void PmergeMe::insertionSort(std::list<int>& lst) {
+	std::list<int>::iterator i;
+	for (i = lst.begin(); i != lst.end(); ++i) {
+		std::list<int>::iterator j = i;
+		while (j != lst.begin() && *std::prev(j) > *j) {
+			std::iter_swap(j, std::prev(j));
+			--j;
+		}
+	}
+}
+
+// Function to perform merge-insertion sort on a list
+std::list<int> PmergeMe::merge_insertion_sort(std::list<int>& lst) {
+	if (lst.size() <= 1) {
+		return lst;
+	} else if (lst.size() <= 11) {
+		insertionSort(lst);
+		return lst;
+	}
+
+	std::list<int>::iterator mid = std::next(lst.begin(), lst.size() / 2);
+	std::list<int> left(lst.begin(), mid);
+	std::list<int> right(mid, lst.end());
+
+	left = merge_insertion_sort(left);
+	right = merge_insertion_sort(right);
+
+	return merge(left, right);
 }
 
 void PmergeMe::display_sequence_list(const std::list<int>& v, const std::string& title)
@@ -205,7 +229,7 @@ void PmergeMe::sort_sequence(std::vector<int>& v, std::list<int>& l)
 	_timeV = ((end.tv_sec - start.tv_sec)  * 1e-6) + (end.tv_usec - start.tv_usec);
 
 	gettimeofday(&start, 0);
-	merge_insertion_sort(l, 5);
+	merge_insertion_sort(l);
 	gettimeofday(&end, 0);
 	_timeL = ((end.tv_sec - start.tv_sec)  * 1e-6) + (end.tv_usec - start.tv_usec);
 }
