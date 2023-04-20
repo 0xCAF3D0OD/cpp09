@@ -3,7 +3,6 @@
 //
 #include <sys/time.h>
 #include <iomanip>
-#include <stdio.h>
 #include "PmergeMe.hpp"
 
 PmergeMe::PmergeMe(void) {}
