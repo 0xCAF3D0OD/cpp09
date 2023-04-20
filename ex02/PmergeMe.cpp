@@ -117,15 +117,18 @@ void	PmergeMe::merge_V(std::vector<int>& v, int left, int mid, int right)
 	int L_side = mid - left + 1;
 	int	R_side = right - mid;
 
+	// Create temporary left and right sub-tables.
 	// Créer des sous-tableaux temporaire gauche et droite.
 	std::vector<int> L(L_side), R(R_side);
 
+	//	Copy the data to the temporary left and right sub-tables.
 	// Copier les données dans les sous-tableaux temporaire gauche et droite.
 	for (int i = 0; i < L_side; ++i)
 		L[i] = v[left + i];
 	for (int j = 0; j < R_side; ++j)
 		R[j] = v[mid + 1 + j];
 
+	// Merge the left and right sub-tables into the main table
 	// Fusionner les sous-tableaux gauche et droit dans le tableau principal
 	int i = 0;
 	int j = 0;
@@ -143,6 +146,7 @@ void	PmergeMe::merge_V(std::vector<int>& v, int left, int mid, int right)
 		k++;
 	}
 
+	// Copy the remaining elements of L[] if any are left
 	// Copier les éléments restants de L[] s'il en reste
 	while (i < L_side) {
 		v[k] = L[i];
@@ -150,6 +154,7 @@ void	PmergeMe::merge_V(std::vector<int>& v, int left, int mid, int right)
 		k++;
 	}
 
+	// Copy the remaining elements of R[] if any are left
 	// Copier les éléments restants de R[] s'il en reste
 	while (j < R_side) {
 		v[k] = R[j];
@@ -172,6 +177,7 @@ void PmergeMe::insertion_sort(std::vector<int>& arr, int left, int right) {
 
 void	PmergeMe::merge_sort(std::vector<int> &v, int left, int right, int max_size_temp_tab)
 {
+	// Apply tri-insertion for small sub-tables
 	// Appliquer tri-insertion pour les sous-tableaux de petite taille
 	if ((right - left + 1) <= max_size_temp_tab) {
 		insertion_sort(v, left, right);
@@ -219,6 +225,7 @@ void PmergeMe::sort_sequence(std::vector<int>& v, std::list<int>& l)
 {
 	int	left = 0;
 	int right = _v.size() - 1;
+	//	Maximum size of sub-tables that will be sorted using the insertion sort.
 	//	Taille maximale des sous-tableaux qui seront triés à l'aide du tri par insertion.
 	int	max_size_temp_tab = 5;
 	struct timeval start, end;
