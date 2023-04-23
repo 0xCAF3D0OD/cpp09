@@ -19,7 +19,9 @@ PmergeMe& PmergeMe::operator=(const PmergeMe &src) {
 	return (*this);
 }
 
-std::list<int> stock_1_string_L(char **av, std::list<int> tab_num)
+/*----------------------------------------------------vector------------------------------------------------------------*/
+
+std::vector<int> PmergeMe::stock_1_string(char **av, std::vector<int> tab_num)
 {
 	std::stringstream	ss;
 	int					num;
@@ -36,80 +38,47 @@ std::list<int> stock_1_string_L(char **av, std::list<int> tab_num)
 	return (tab_num);
 }
 
-std::list<int> stock_many_strings_L(char **av, std::list<int> tab_num) {
-	for (int i = 1; av[i]; i++) {
+std::vector<int> PmergeMe::stock_many_strings(char **av, std::vector<int> tab_num)
+{
+	for (int i = 1; av[i]; i++)
+	{
 		if (std::atoi(av[i]) > INT_MAX || std::atoi(av[i]) < 0) {
 			std::cerr << "error: INT_MIN INT_MAX" << std::endl;
-			exit(1);
+			exit (1);
 		}
 		tab_num.push_back(std::atoi(av[i]));
 	}
 	return (tab_num);
 }
 
-// Function to merge two sorted lists
-std::list<int> PmergeMe::merge(const std::list<int>& left, const std::list<int>& right) {
-	std::list<int> result;
-	std::list<int>::const_iterator left_iter = left.begin();
-	std::list<int>::const_iterator right_iter = right.begin();
-
-	while (left_iter != left.end() && right_iter != right.end()) {
-		if (*left_iter <= *right_iter) {
-			result.push_back(*left_iter);
-			++left_iter;
-		} else {
-			result.push_back(*right_iter);
-			++right_iter;
-		}
-	}
-
-	result.insert(result.end(), left_iter, left.end());
-	result.insert(result.end(), right_iter, right.end());
-
-	return result;
-}
-
-// Function to perform insertion sort on a list
-void PmergeMe::insertionSort(std::list<int>& lst) {
-	std::list<int>::iterator i;
-	for (i = lst.begin(); i != lst.end(); ++i) {
-		std::list<int>::iterator j = i;
-		while (j != lst.begin() && *std::prev(j) > *j) {
-			std::iter_swap(j, std::prev(j));
-			--j;
-		}
-	}
-}
-
-// Function to perform merge-insertion sort on a list
-std::list<int> PmergeMe::merge_insertion_sort(std::list<int>& lst) {
-	if (lst.size() <= 1) {
-		return lst;
-	} else if (lst.size() <= 11) {
-		insertionSort(lst);
-		return lst;
-	}
-
-	std::list<int>::iterator mid = std::next(lst.begin(), lst.size() / 2);
-	std::list<int> left(lst.begin(), mid);
-	std::list<int> right(mid, lst.end());
-
-	left = merge_insertion_sort(left);
-	right = merge_insertion_sort(right);
-
-	return merge(left, right);
-}
-
-void PmergeMe::display_sequence_list(const std::list<int>& v, const std::string& title)
+void	PmergeMe::merge_sort(std::vector<int> &v, int left, int right, int max_size_temp_tab)
 {
-	std::cout << title << ":	";
-	for (std::list<int>::const_iterator it = v.begin(); it != v.end(); ++it) {
-		std::cout << *it << " ";
+	// Apply tri-insertion for small sub-tables
+	// Appliquer tri-insertion pour les sous-tableaux de petite taille
+	if ((right - left + 1) <= max_size_temp_tab) {
+		insertion_sort(v, left, right);
+		return ;
 	}
-	std::cout << std::endl;
+	if (left < right) {
+		int mid = left + (right - left) / 2;
+		merge_sort(v, left, mid, max_size_temp_tab);
+		merge_sort(v, mid + 1, right, max_size_temp_tab);
+		merge_V(v, left, mid, right);
+	}
 }
 
-/*----------------------------------------------------vector------------------------------------------------------------*/
+void PmergeMe::insertion_sort(std::vector<int>& arr, int left, int right)
+{
+	for (int i = left + 1; i <= right; i++) {
+		int key = arr[i];
+		int j = i - 1;
+		while (j >= left && arr[j] > key) {
+			arr[j + 1] = arr[j];
+			j--;
+		}
+		arr[j + 1] = key;
+	}
+}
 
 void	PmergeMe::merge_V(std::vector<int>& v, int left, int mid, int right)
 {
@@ -162,35 +131,18 @@ void	PmergeMe::merge_V(std::vector<int>& v, int left, int mid, int right)
 	}
 }
 
-void PmergeMe::insertion_sort(std::vector<int>& arr, int left, int right) {
-	for (int i = left + 1; i <= right; i++) {
-		int key = arr[i];
-		int j = i - 1;
-		while (j >= left && arr[j] > key) {
-			arr[j + 1] = arr[j];
-			j--;
-		}
-		arr[j + 1] = key;
-	}
-}
-
-void	PmergeMe::merge_sort(std::vector<int> &v, int left, int right, int max_size_temp_tab)
+void PmergeMe::display_sequence_vector(const std::vector<int>& v, const std::string& title)
 {
-	// Apply tri-insertion for small sub-tables
-	// Appliquer tri-insertion pour les sous-tableaux de petite taille
-	if ((right - left + 1) <= max_size_temp_tab) {
-		insertion_sort(v, left, right);
-		return ;
+	std::cout << title << ":	\" ";
+	for (std::vector<int>::const_iterator it = v.begin(); it != v.end(); ++it) {
+		std::cout << *it << " ";
 	}
-	if (left < right) {
-		int mid = left + (right - left) / 2;
-		merge_sort(v, left, mid, max_size_temp_tab);
-		merge_sort(v, mid + 1, right, max_size_temp_tab);
-		merge_V(v, left, mid, right);
-	}
+	std::cout << "\"" << std::endl;
 }
 
-std::vector<int> stock_1_string(char **av, std::vector<int> tab_num)
+/*----------------------------------------------------list------------------------------------------------------------*/
+
+std::list<int> PmergeMe::stock_1_string_L(char **av, std::list<int> tab_num)
 {
 	std::stringstream	ss;
 	int					num;
@@ -207,62 +159,132 @@ std::vector<int> stock_1_string(char **av, std::vector<int> tab_num)
 	return (tab_num);
 }
 
-std::vector<int> stock_many_strings(char **av, std::vector<int> tab_num)
+std::list<int> PmergeMe::stock_many_strings_L(char **av, std::list<int> tab_num)
 {
-	for (int i = 1; av[i]; i++)
-	{
+	for (int i = 1; av[i]; i++) {
 		if (std::atoi(av[i]) > INT_MAX || std::atoi(av[i]) < 0) {
 			std::cerr << "error: INT_MIN INT_MAX" << std::endl;
-			exit (1);
+			exit(1);
 		}
 		tab_num.push_back(std::atoi(av[i]));
 	}
 	return (tab_num);
 }
 
-void PmergeMe::sort_sequence(std::vector<int>& v, std::list<int>& l)
+// Function to perform insertion sort on a list
+void PmergeMe::insertionSort(std::list<int>& lst)
 {
-	int	left = 0;
-	int right = _v.size() - 1;
-	//	Maximum size of sub-tables that will be sorted using the insertion sort.
-	//	Taille maximale des sous-tableaux qui seront triés à l'aide du tri par insertion.
-	int	max_size_temp_tab = 5;
-	struct timeval start, end;
+	std::list<int>::iterator i;
 
-	gettimeofday(&start, 0);
-	merge_sort(v, left, right, max_size_temp_tab);
-	gettimeofday(&end, 0);
-	_timeV = ((end.tv_sec - start.tv_sec)  * 1e-6) + (end.tv_usec - start.tv_usec);
-
-	gettimeofday(&start, 0);
-	merge_insertion_sort(l);
-	gettimeofday(&end, 0);
-	_timeL = ((end.tv_sec - start.tv_sec)  * 1e-6) + (end.tv_usec - start.tv_usec);
+	for (i = lst.begin(); i != lst.end(); ++i) {
+		std::list<int>::iterator j = i;
+		while (j != lst.begin() && *std::prev(j) > *j) {
+			std::iter_swap(j, std::prev(j));
+			--j;
+		}
+	}
 }
 
-void PmergeMe::display_sequence_vector(const std::vector<int>& v, const std::string& title)
+// Function to merge two sorted lists
+std::list<int> PmergeMe::merge(const std::list<int>& left, const std::list<int>& right)
+{
+	std::list<int> result;
+	std::list<int>::const_iterator left_iter = left.begin();
+	std::list<int>::const_iterator right_iter = right.begin();
+
+	while (left_iter != left.end() && right_iter != right.end()) {
+		if (*left_iter <= *right_iter) {
+			result.push_back(*left_iter);
+			++left_iter;
+		}
+		else {
+			result.push_back(*right_iter);
+			++right_iter;
+		}
+	}
+	result.insert(result.end(), left_iter, left.end());
+	result.insert(result.end(), right_iter, right.end());
+
+	return (result);
+}
+
+// Function to perform merge-insertion sort on a list
+std::list<int> PmergeMe::merge_insertion_sort(std::list<int>& lst) {
+	if (lst.size() <= 1) {
+		return lst;
+	}
+	else if (lst.size() <= 11) {
+		insertionSort(lst);
+		return lst;
+	}
+
+	std::list<int>::iterator mid = std::next(lst.begin(), lst.size() / 2);
+	std::list<int> left(lst.begin(), mid);
+	std::list<int> right(mid, lst.end());
+
+	left = merge_insertion_sort(left);
+	right = merge_insertion_sort(right);
+
+	lst = merge(left, right);
+	return (lst);
+}
+
+void PmergeMe::display_sequence_list(const std::list<int>& l, const std::string& title)
 {
 	std::cout << title << ":	\" ";
-	for (std::vector<int>::const_iterator it = v.begin(); it != v.end(); ++it) {
+	for (std::list<int>::const_iterator it = l.begin(); it != l.end(); ++it) {
 		std::cout << *it << " ";
 	}
 	std::cout << "\"" << std::endl;
 }
 
+/*----------------------------------------------------list------------------------------------------------------------*/
 
-void	PmergeMe::algo(void)
+int duplicate(char **av, int len)
 {
-	display_sequence_vector(_v, "vector before");
-	display_sequence_list(_l, "list before");
+	char **tmp = av;
+	std::vector<int> numbers;
 
-	sort_sequence(_v, _l);
+	for (int i = 0; i < len; ++i)
+		numbers.push_back(atoi(tmp[i]));
+	std::sort(numbers.begin(), numbers.end());
+	for (size_t i = 0; i < numbers.size() - 1; ++i) {
+		if (numbers[i] == numbers[i + 1]){
+			std::cerr << "error: duplicate number" << std::endl;
+			return (1);
+		}
+	}
+	return (0);
+}
 
-	display_sequence_vector(_v, "\nvector after");
-	display_sequence_list(_l, "list after");
-	std::cout << "\nTime to process a range of: " << _v.size() << " elements with std::vector: ";
-	std::cout << "Measured time is = " << std::fixed << std::setprecision(5) << _timeV << " microseconds." << std::endl;
-	std::cout << "Time to process a range of: " << _l.size() << " elements with std::list: ";
-	std::cout << "Measured time is = " << std::fixed << std::setprecision(5) << _timeL << " microseconds." << std::endl;
+void	PmergeMe::stock_args_string(char **av, int ac)
+{
+	std::vector<int> 	v_numbers;
+	std::list<int> 		l_numbers;
+
+	if (ac == 2) {
+		if (!duplicate(av, strlen(av[1]))) {
+			v_numbers = stock_1_string(av, v_numbers);
+			l_numbers = stock_1_string_L(av, l_numbers);
+		}
+		else
+			exit(1);
+	}
+	else {
+		if (!duplicate(av, ac)) {
+			v_numbers = stock_many_strings(av, v_numbers);
+			l_numbers = stock_many_strings_L(av, l_numbers);
+		}
+		else
+			exit(1);
+	}
+	if (v_numbers.size() == 1 || l_numbers.size() == 1)
+	{
+		std::cerr << "error: less arguments" << std::endl;
+		exit(1);
+	}
+	this->_v = v_numbers;
+	this->_l = l_numbers;
 }
 
 int PmergeMe::check_args_is_digit(char **av, int ac)
@@ -291,26 +313,39 @@ int PmergeMe::check_args_is_digit(char **av, int ac)
 	return (0);
 }
 
-void	PmergeMe::stock_args_string(char **av, int ac)
+void PmergeMe::sort_sequence(std::vector<int>& v, std::list<int>& l)
 {
-	std::vector<int> 	v_numbers;
-	std::list<int> 		l_numbers;
+	int	left = 0;
+	int right = _v.size() - 1;
+	//	Maximum size of sub-tables that will be sorted using the insertion sort.
+	//	Taille maximale des sous-tableaux qui seront triés à l'aide du tri par insertion.
+	int	max_size_temp_tab = 5;
+	struct timeval start, end;
 
-	if (ac == 2) {
-		v_numbers = stock_1_string(av, v_numbers);
-		l_numbers = stock_1_string_L(av, l_numbers);
-	}
-	else {
-		v_numbers = stock_many_strings(av, v_numbers);
-		l_numbers = stock_many_strings_L(av, l_numbers);
-	}
-	if (v_numbers.size() == 1 || l_numbers.size() == 1)
-	{
-		std::cerr << "error: less arguments" << std::endl;
-		exit(1);
-	}
-	this->_v = v_numbers;
-	this->_l = l_numbers;
+	gettimeofday(&start, 0);
+	merge_sort(v, left, right, max_size_temp_tab);
+	gettimeofday(&end, 0);
+	_timeV = ((end.tv_sec - start.tv_sec)  * 1e-6) + (end.tv_usec - start.tv_usec);
+
+	gettimeofday(&start, 0);
+	merge_insertion_sort(l);
+	gettimeofday(&end, 0);
+	_timeL = ((end.tv_sec - start.tv_sec)  * 1e-6) + (end.tv_usec - start.tv_usec);
+}
+
+void	PmergeMe::algo(void)
+{
+	display_sequence_vector(_v, "vector before");
+	display_sequence_list(_l, "list before");
+
+	sort_sequence(_v, _l);
+
+	display_sequence_vector(_v, "\nvector after");
+	display_sequence_list(_l, "list after");
+	std::cout << "\nTime to process a range of: " << _v.size() << " elements with std::vector:	";
+	std::cout << "Measured time is = " << std::fixed << std::setprecision(5) << _timeV << " microseconds." << std::endl;
+	std::cout << "Time to process a range of: " << _l.size() << " elements with std::list:	";
+	std::cout << "Measured time is = " << std::fixed << std::setprecision(5) << _timeL << " microseconds." << std::endl;
 }
 
 PmergeMe::~PmergeMe(void) {}
