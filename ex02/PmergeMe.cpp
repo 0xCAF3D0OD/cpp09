@@ -243,6 +243,30 @@ void PmergeMe::display_sequence_list(const std::list<int>& l, const std::string&
 
 /*----------------------------------------------------list------------------------------------------------------------*/
 
+char	**new_av(char **av)
+{
+	char	**table;
+	char	*av_copy;
+	char	*token;
+	int		i = 0;
+
+	table = new char*[std::strlen(av[1])];
+	av_copy = new char[std::strlen(av[1]) + 1];
+	strcpy(av_copy, av[1]);
+
+	token = std::strtok(av_copy, " ");
+	while (token)
+	{
+		table[i] = new char(std::strlen(token) + 1);
+		strcpy(table[i], token);
+		i++;
+		token = strtok(NULL, " ");
+	}
+
+	delete[] av_copy;
+	return (table);
+}
+
 int duplicate(char **av, int len)
 {
 	char **tmp = av;
@@ -252,12 +276,12 @@ int duplicate(char **av, int len)
 		numbers.push_back(atoi(tmp[i]));
 	std::sort(numbers.begin(), numbers.end());
 	for (size_t i = 0; i < numbers.size() - 1; ++i) {
-		if (numbers[i] == numbers[i + 1]){
+		if (numbers[i] == numbers[i + 1]) {
 			for (size_t k = 0; k != numbers.size(); ++k)
 			{
-				if (numbers[k] == numbers[i] && numbers[k + 1])
+				if (numbers[k] == numbers[i] && numbers[k + 1] == numbers[k])
 				{
-					std::cout << RED << numbers[k] << " " << numbers[k + 1] << RES << " ";
+					std::cout << RED << numbers[k] << " " << numbers[k + 1] << RES << std::endl;
 					break ;
 				}
 				std::cout << numbers[k] << " ";
@@ -273,9 +297,14 @@ void	PmergeMe::stock_args_string(char **av, int ac)
 {
 	std::vector<int> 	v_numbers;
 	std::list<int> 		l_numbers;
+	char				**n_av;
+	int					size = 0;
 
 	if (ac == 2) {
-		if (!duplicate(av, strlen(av[1]))) {
+		n_av = new_av(av);
+		for (int i = 0; n_av[i]; ++i)
+			size++;
+		if (!duplicate(n_av, size)) {
 			v_numbers = stock_1_string(av, v_numbers);
 			l_numbers = stock_1_string_L(av, l_numbers);
 		}
