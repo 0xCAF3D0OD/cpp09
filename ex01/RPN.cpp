@@ -34,15 +34,15 @@ int	RPN::check_arguments(std::string arg) {
 					break ;
 				}
 			}
-			// return error
+			// return Error
 			if (!all_digits) {
-				std::cerr << "error" << std::endl;
+				std::cerr << "Error: Not all arguments are digits." << std::endl;
 				return (1);
 			}
 			// check if the digit is bigger than 9 or lower than 0
 			sa << word;
 			if ((sa >> i && (i > 9 || i < 0))) {
-				std::cerr << "number is superior as 10 or less than 0" << std::endl;
+				std::cerr << "Number is superior as 10 or less than 0" << std::endl;
 				return (1);
 			}
 		}
@@ -67,37 +67,41 @@ int	RPN::operator_function(int first, int second, std::string operat) {
 
 int	RPN::calculus(std::string arg) {
 	std::stringstream ss(arg);
-	std::stringstream sa;
 	std::string word;
 	int	i = 0;
 	int res = 0;
 	int first = 0;
 	int second = 0;
 
-	std::cout << "argument: " << arg << std::endl;
-
 	while (ss >> word) {
 		if ((word.compare("+")) && (word.compare("-")) && (word.compare("*")) && (word.compare("/")))
 		{
-			std::cout << word.c_str() << std::endl;
+//			std::cout << word.c_str() << std::endl;
 			i = std::atoi(word.c_str());
 			stack.push(i);
 			continue ;
 		}
 		if (stack.size() < 2)
 		{
-			std::cout << "error" << std::endl;
+			std::cerr << "Error: size of argument less than 2." << std::endl;
 			return (1);
 		}
-		std::cout << stack.size() << " " << stack.top() << std::endl;
+//		std::cout << stack.size() << " " << stack.top() << std::endl;
 		second = stack.top();
 		stack.pop();
 		first = stack.top();
 		stack.pop();
 		res = operator_function(first, second, word);
-		stack.push(res);
+		if (stack.empty())
+			stack.push(res);
 	}
-	std::cout << "the result: "<< stack.top() << std::endl;
+	if ((word.compare("+")) && (word.compare("-")) && (word.compare("*")) && (word.compare("/")))
+	{
+		std::cerr << "Error: The input is not conventional, last element must be an operator" << std::endl;
+		return (1);
+	}
+	else
+		std::cout << "The result: "<< stack.top() << std::endl;
 	return (0);
 }
 
