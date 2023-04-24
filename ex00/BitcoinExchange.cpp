@@ -54,7 +54,7 @@ bool 	BitcoinExchange::is_valid_date(const std::string& date_str)
 	if (month < 1 || month > 12)
 		return (false);
 	
-	std::cout << "year = " << year << " " << month << " " << day << std::endl;
+//	std::cout << "year = " << year << "-" << month << "-" << day << std::endl;
 	return (true);
 }
 
@@ -118,13 +118,21 @@ int	BitcoinExchange::data_base(const char *av)
 				}
 				i = it->second;
 				i *= nb;
- 				std::cout << it->first << " | " << i << std::endl;
+ 				std::cout << it->first << " => " << nb << " => " << i << std::endl;
 			}
 			else {
 				float i;
+				std::stringstream ss;
+				std::string str;
+				ss << read;
+				while (ss >> str)
+				{
+					if (std::strcmp(str.c_str(), " "))
+						break;
+				}
 				i = it->second;
 				i *= nb;
-				std::cout << read << " | " << i << std::endl;
+				std::cout << str << " => " << nb << " => " << i << std::endl;
 			}
 		}
 	}

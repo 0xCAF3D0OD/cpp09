@@ -9,8 +9,8 @@ int main(int ac, char **av)
 		std::cout << "Error: Could not open file" << std::endl;
 		return (1);
 	}
-	BitcoinExchange test;
-	test.init_csv();
-	test.data_base(av[1]);
+	BitcoinExchange btc;
+	btc.init_csv();
+	btc.data_base(av[1]);
 	return (0);
 }
