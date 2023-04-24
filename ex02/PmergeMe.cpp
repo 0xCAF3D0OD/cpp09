@@ -5,6 +5,9 @@
 #include <iomanip>
 #include "PmergeMe.hpp"
 
+#define RED "\033[1;31m"
+#define RES "\033[0m\n"
+
 PmergeMe::PmergeMe(void) {}
 
 PmergeMe::PmergeMe(PmergeMe const& src) {
@@ -250,7 +253,16 @@ int duplicate(char **av, int len)
 	std::sort(numbers.begin(), numbers.end());
 	for (size_t i = 0; i < numbers.size() - 1; ++i) {
 		if (numbers[i] == numbers[i + 1]){
-			std::cerr << "error: duplicate number" << std::endl;
+			for (size_t k = 0; k != numbers.size(); ++k)
+			{
+				if (numbers[k] == numbers[i] && numbers[k + 1])
+				{
+					std::cout << RED << numbers[k] << " " << numbers[k + 1] << RES << " ";
+					break ;
+				}
+				std::cout << numbers[k] << " ";
+			}
+			std::cerr << RED << "\nError: duplicate number: " << numbers[i] << " " << numbers[i + 1] << RES << std::endl;
 			return (1);
 		}
 	}
